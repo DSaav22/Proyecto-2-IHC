@@ -5,7 +5,7 @@ export function Mark() {
   return (
     <Link
       to="/"
-      className="mb-7 block w-fit rounded-full bg-ink px-2.5 py-1.5 text-[0.8rem] font-bold uppercase tracking-wide text-accent"
+      className="mb-l block w-fit rounded-pill bg-second-surface px-s py-xs text-label uppercase tracking-wide text-on-second-surface"
     >
       Planazo
     </Link>
@@ -14,7 +14,7 @@ export function Mark() {
 
 export function Screen({ children }: { children: ReactNode }) {
   return (
-    <main className="mx-auto flex min-h-screen max-w-180 flex-col justify-center px-6 pb-18 pt-12">
+    <main className="mx-auto flex min-h-screen max-w-180 flex-col justify-center px-l pb-xl pt-xl">
       {children}
     </main>
   );
@@ -23,7 +23,7 @@ export function Screen({ children }: { children: ReactNode }) {
 export function LoadingScreen() {
   return (
     <Screen>
-      <p role="status" className="text-muted">
+      <p role="status" className="text-text-muted">
         Cargando…
       </p>
     </Screen>
@@ -34,8 +34,8 @@ export function FormCard({ title, children }: { title: string; children: ReactNo
   return (
     <Screen>
       <Mark />
-      <h1 className="text-4xl font-bold tracking-tight">{title}</h1>
-      <div className="mt-6 border-t border-line pt-6">{children}</div>
+      <h1 className="text-heading">{title}</h1>
+      <div className="mt-l border-t border-border pt-l">{children}</div>
     </Screen>
   );
 }
@@ -48,19 +48,19 @@ interface FieldProps extends InputHTMLAttributes<HTMLInputElement> {
 
 export function Field({ id, label, error, ...props }: FieldProps) {
   return (
-    <div className="mb-4">
-      <label htmlFor={id} className="mb-1 block text-sm font-semibold">
+    <div className="mb-m">
+      <label htmlFor={id} className="mb-xs block text-label">
         {label}
       </label>
       <input
         id={id}
         aria-invalid={error ? true : undefined}
         aria-describedby={error ? `${id}-error` : undefined}
-        className="w-full rounded-md border border-line bg-white px-3 py-2 text-base focus:outline-2 focus:outline-ink"
+        className="min-h-11 w-full rounded-sm border border-border-strong bg-card px-m py-s text-body focus:outline-2 focus:outline-primary"
         {...props}
       />
       {error ? (
-        <p id={`${id}-error`} className="mt-1 text-sm text-red-700">
+        <p id={`${id}-error`} className="mt-xs text-label text-error">
           {error}
         </p>
       ) : null}
@@ -73,7 +73,7 @@ export function ErrorAlert({ message }: { message: string | null }) {
   return (
     <p
       role="alert"
-      className="mb-4 rounded-md border border-red-300 bg-red-50 px-3 py-2 text-sm text-red-800"
+      className="mb-m rounded-sm border border-error bg-[color-mix(in_srgb,var(--color-error)_8%,var(--color-card))] px-m py-s text-label text-error"
     >
       {message}
     </p>
@@ -84,7 +84,7 @@ export function SuccessNotice({ children }: { children: ReactNode }) {
   return (
     <div
       role="status"
-      className="mb-4 rounded-md border border-line bg-white px-3 py-2 text-sm text-ink"
+      className="mb-m rounded-sm border border-success bg-card px-m py-s text-label text-text"
     >
       {children}
     </div>
@@ -97,7 +97,7 @@ export function PrimaryButton({
 }: ButtonHTMLAttributes<HTMLButtonElement>) {
   return (
     <button
-      className="rounded-full bg-ink px-5 py-2.5 font-semibold text-accent disabled:opacity-60"
+      className="min-h-11 rounded-pill bg-primary px-l py-s text-button text-on-primary disabled:opacity-60"
       {...props}
     >
       {children}
@@ -105,4 +105,4 @@ export function PrimaryButton({
   );
 }
 
-export const linkClass = "font-semibold underline underline-offset-2";
+export const linkClass = "font-semibold text-primary underline underline-offset-2";

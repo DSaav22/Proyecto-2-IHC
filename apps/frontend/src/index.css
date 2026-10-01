@@ -1,20 +1,13 @@
 @import "tailwindcss";
-
-@theme {
-  --color-ink: #1b2430;
-  --color-muted: #5c6775;
-  --color-paper: #f4f1ea;
-  --color-line: #d9d3c7;
-  --color-accent: #c6f14e;
-  --font-sans: "Segoe UI", system-ui, sans-serif;
-}
+@import "./tokens.css";
 
 body {
   margin: 0;
   min-height: 100vh;
   font-family: var(--font-sans);
-  color: var(--color-ink);
-  background:
-    linear-gradient(180deg, rgba(198, 241, 78, 0.55), rgba(198, 241, 78, 0) 140px),
-    var(--color-paper);
+  font-size: var(--text-body);
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--color-text);
+  background: var(--color-surface);
 }

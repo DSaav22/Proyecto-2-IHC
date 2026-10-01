@@ -20,11 +20,11 @@ export default function MyPlansPage() {
   return (
     <Screen>
       <Mark />
-      <h1 className="text-4xl font-bold tracking-tight">Hola, {user?.name}</h1>
-      <p className="mt-4 text-lg text-muted">
+      <h1 className="text-heading">Hola, {user?.name}</h1>
+      <p className="mt-m text-body text-text-muted">
         Aquí aparecerán tus planes. Por ahora todavía no hay ninguno.
       </p>
-      <div className="mt-8">
+      <div className="mt-l">
         <PrimaryButton type="button" onClick={handleLogout} disabled={pending}>
           Cerrar sesión
         </PrimaryButton>

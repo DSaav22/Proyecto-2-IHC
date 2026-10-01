@@ -138,7 +138,7 @@ export default function RecoverPage() {
           {submitting ? "Solicitando…" : "Solicitar token"}
         </PrimaryButton>
       </form>
-      <p className="mt-6 text-sm text-muted">
+      <p className="mt-l text-body text-text-muted">
         <Link to="/login" className={linkClass}>
           Volver a iniciar sesión
         </Link>

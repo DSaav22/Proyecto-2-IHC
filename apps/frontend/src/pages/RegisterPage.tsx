@@ -84,7 +84,7 @@ export default function RegisterPage() {
           {submitting ? "Creando…" : "Crear cuenta"}
         </PrimaryButton>
       </form>
-      <p className="mt-6 text-sm text-muted">
+      <p className="mt-l text-body text-text-muted">
         ¿Ya tienes cuenta?{" "}
         <Link to="/login" className={linkClass}>
           Iniciar sesión

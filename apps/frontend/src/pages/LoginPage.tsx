@@ -65,7 +65,7 @@ export default function LoginPage() {
           {submitting ? "Entrando…" : "Entrar"}
         </PrimaryButton>
       </form>
-      <p className="mt-6 text-sm text-muted">
+      <p className="mt-l text-body text-text-muted">
         <Link to="/recover" className={linkClass}>
           ¿Olvidaste tu contraseña?
         </Link>

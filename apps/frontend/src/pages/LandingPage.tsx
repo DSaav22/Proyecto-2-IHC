@@ -8,21 +8,21 @@ export default function LandingPage() {
       <h1 className="text-[clamp(3.5rem,10vw,6.5rem)] font-bold leading-[0.9] tracking-[-0.05em]">
         Planazo
       </h1>
-      <p className="mt-6 border-t border-line pt-5 text-[clamp(1.35rem,3vw,1.8rem)] leading-tight text-muted">
+      <p className="mt-l border-t border-border pt-m text-[clamp(1.35rem,3vw,1.8rem)] leading-tight text-text-muted">
         Ayudar a un grupo
         <br />
         a organizar un plan.
       </p>
-      <nav aria-label="Acceso" className="mt-10 flex flex-wrap gap-3">
+      <nav aria-label="Acceso" className="mt-xl flex flex-wrap gap-m">
         <Link
           to="/login"
-          className="rounded-full bg-ink px-5 py-2.5 font-semibold text-accent"
+          className="inline-flex min-h-11 items-center rounded-pill bg-primary px-l text-button text-on-primary"
         >
           Iniciar sesión
         </Link>
         <Link
           to="/register"
-          className="rounded-full border border-ink px-5 py-2.5 font-semibold text-ink"
+          className="inline-flex min-h-11 items-center rounded-pill border border-primary px-l text-button text-primary"
         >
           Crear cuenta
         </Link>
