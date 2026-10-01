@@ -21,13 +21,17 @@ export default function MyPlansPage() {
     <Screen>
       <Mark />
       <h1 className="text-heading">Hola, {user?.name}</h1>
-      <p className="mt-m text-body text-text-muted">
-        Aquí aparecerán tus planes. Por ahora todavía no hay ninguno.
-      </p>
-      <div className="mt-l">
-        <PrimaryButton type="button" onClick={handleLogout} disabled={pending}>
-          Cerrar sesión
-        </PrimaryButton>
+      <div className="mt-l border-t border-border pt-l">
+        <div className="rounded-base border border-border bg-card p-xl">
+          <p className="text-body text-text-muted">
+            Aquí aparecerán tus planes. Por ahora todavía no hay ninguno.
+          </p>
+        </div>
+        <div className="mt-l">
+          <PrimaryButton type="button" onClick={handleLogout} disabled={pending}>
+            {pending ? "Cerrando…" : "Cerrar sesión"}
+          </PrimaryButton>
+        </div>
       </div>
     </Screen>
   );

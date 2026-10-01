@@ -88,7 +88,7 @@ authRouter.post(
     }
     const { email } = parsed.data;
     const message =
-      "Si el correo existe, se generó un token de recuperación (simulado, no se envía ningún correo).";
+      "Si el correo existe, se generó un token de recuperación.";
     const user = await prisma.user.findUnique({ where: { email } });
     if (!user) {
       res.status(200).json({ message });

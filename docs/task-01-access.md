@@ -43,7 +43,7 @@ El usuario público devuelto por la API contiene solo `id`, `email`, `name` y `c
 | POST | `/api/auth/login` | Inicia sesión (mensaje genérico en fallos). | 200, 401 |
 | POST | `/api/auth/logout` | Borra la cookie de sesión. | 200 |
 | GET | `/api/auth/me` | Usuario de la sesión actual. | 200, 401 |
-| POST | `/api/auth/recover` | Genera el token simulado y lo devuelve en el cuerpo. | 200, 400 |
+| POST | `/api/auth/recover` | Genera el token y lo devuelve en el cuerpo. | 200, 400 |
 | POST | `/api/auth/recover/confirm` | Cambia la contraseña con `email`, `token` y `newPassword`. | 200, 400 |
 
 ## Rutas de la aplicación

@@ -86,13 +86,13 @@ export default function RecoverPage() {
         <SuccessNotice>
           {simulatedToken ? (
             <>
-              <strong>Token simulado (no se envía ningún correo):</strong>{" "}
+              <strong>Token:</strong>{" "}
               <code data-testid="simulated-token" className="break-all">
                 {simulatedToken}
               </code>
             </>
           ) : (
-            "Si el correo existe, se generó un token de recuperación simulado."
+            "Si el correo existe, se generó un token de recuperación."
           )}
         </SuccessNotice>
         <form onSubmit={handleConfirm} noValidate>
