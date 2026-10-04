@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Iniciar sesión · Planazo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/estilos.css">
+</head>
+<body>
+  <main class="form-pag">
+    <div class="caja">
+      <h1>Iniciar sesión</h1>
+      <form id="form">
+        <div class="aviso" id="aviso" hidden></div>
+        <label for="correo">Correo electrónico</label>
+        <input id="correo" type="email" autocomplete="email">
+        <p class="error" id="err-correo" hidden></p>
+        <label for="clave">Contraseña</label>
+        <input id="clave" type="password" autocomplete="current-password">
+        <p class="error" id="err-clave" hidden></p>
+        <button class="boton" id="boton">Entrar</button>
+      </form>
+      <p class="links">
+        <a href="/recover">¿Olvidaste tu contraseña?</a>
+        ·
+        <a href="/register">Crear cuenta</a>
+      </p>
+    </div>
+  </main>
+  <script src="/comun.js"></script>
+  <script>
+    pedir("/api/auth/me").then(function (res) {
+      if (res.ok) location.replace("/mis-planes");
+    });
+
+    document.getElementById("form").onsubmit = async function (e) {
+      e.preventDefault();
+      var correo = document.getElementById("correo").value;
+      var clave = document.getElementById("clave").value;
+      mostrar("err-correo", "");
+      mostrar("err-clave", "");
+      mostrar("aviso", "");
+
+      if (!correoValido(correo)) mostrar("err-correo", "Ingresa un correo válido.");
+      if (!clave) mostrar("err-clave", "Ingresa tu contraseña.");
+      if (!correoValido(correo) || !clave) return;
+
+      var boton = document.getElementById("boton");
+      boton.disabled = true;
+      boton.textContent = "Entrando…";
+
+      var res = await pedir("/api/auth/login", { correo: correo.trim(), clave: clave });
+      if (!res.ok) {
+        mostrar("aviso", res.json.message || "No se pudo iniciar sesión.");
+        boton.disabled = false;
+        boton.textContent = "Entrar";
+        return;
+      }
+      location.replace("/mis-planes");
+    };
+  </script>
+</body>
+</html>

@@ -1,9 +1,0 @@
-{
-    "files.exclude": {
-        "**/.claude": true,
-        "**/.cursor": true,
-        "**/.opencode": true,
-        "**/.codegraph": true,
-        "**/.atl": true
-    }
-}

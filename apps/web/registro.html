@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Crear cuenta · Planazo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/estilos.css">
+</head>
+<body>
+  <main class="form-pag">
+    <div class="caja">
+      <h1>Crear cuenta</h1>
+      <form id="form">
+        <div class="aviso" id="aviso" hidden></div>
+        <label for="nombre">Nombre</label>
+        <input id="nombre" type="text" autocomplete="name">
+        <p class="error" id="err-nombre" hidden></p>
+        <label for="correo">Correo electrónico</label>
+        <input id="correo" type="email" autocomplete="email">
+        <p class="error" id="err-correo" hidden></p>
+        <label for="clave">Contraseña (mínimo 8 caracteres)</label>
+        <input id="clave" type="password" autocomplete="new-password">
+        <p class="error" id="err-clave" hidden></p>
+        <button class="boton" id="boton">Crear cuenta</button>
+      </form>
+      <p class="links"><a href="/login">¿Ya tienes cuenta? Inicia sesión</a></p>
+    </div>
+  </main>
+  <script src="/comun.js"></script>
+  <script>
+    pedir("/api/auth/me").then(function (res) {
+      if (res.ok) location.replace("/mis-planes");
+    });
+
+    document.getElementById("form").onsubmit = async function (e) {
+      e.preventDefault();
+      var nombre = document.getElementById("nombre").value.trim();
+      var correo = document.getElementById("correo").value.trim();
+      var clave = document.getElementById("clave").value;
+      mostrar("err-nombre", "");
+      mostrar("err-correo", "");
+      mostrar("err-clave", "");
+      mostrar("aviso", "");
+
+      var mal = false;
+      if (!nombre) { mostrar("err-nombre", "Ingresa tu nombre."); mal = true; }
+      if (!correoValido(correo)) { mostrar("err-correo", "Ingresa un correo válido."); mal = true; }
+      if (clave.length < 8) { mostrar("err-clave", "La contraseña debe tener al menos 8 caracteres."); mal = true; }
+      if (mal) return;
+
+      var boton = document.getElementById("boton");
+      boton.disabled = true;
+      boton.textContent = "Creando…";
+
+      var res = await pedir("/api/auth/register", {
+        nombre: nombre,
+        correo: correo,
+        clave: clave
+      });
+
+      if (!res.ok) {
+        var errs = res.json.errors || {};
+        if (errs.nombre) mostrar("err-nombre", errs.nombre);
+        if (errs.correo) mostrar("err-correo", errs.correo);
+        if (errs.clave) mostrar("err-clave", errs.clave);
+        mostrar("aviso", res.json.message || "No se pudo crear la cuenta.");
+        boton.disabled = false;
+        boton.textContent = "Crear cuenta";
+        return;
+      }
+      location.href = "/mis-planes";
+    };
+  </script>
+</body>
+</html>

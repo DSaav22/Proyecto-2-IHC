@@ -1,14 +1,5 @@
-node_modules/
-dist/
-build/
-coverage/
-.env
-.env.*
-!.env.example
-*.log
+apps/api/data/
 .DS_Store
 Thumbs.db
-*.tsbuildinfo
-.vite/
-.codegraph/
-.atl/
+*.log
+node_modules

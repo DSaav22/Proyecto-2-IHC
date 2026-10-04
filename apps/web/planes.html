@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mis planes · Planazo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/estilos.css">
+</head>
+<body>
+  <p class="centro" id="cargando">Cargando…</p>
+  <main class="form-pag" id="contenido" hidden>
+    <div>
+      <div class="barra">
+        <h1 id="saludo">Hola</h1>
+        <button class="boton-linea" type="button" id="salir">Cerrar sesión</button>
+      </div>
+      <div class="caja caja-ancha">
+        <h2>Nuevo plan</h2>
+        <form id="nuevo">
+          <label for="nombre">Nombre</label>
+          <input id="nombre" type="text" placeholder="Cena del viernes">
+          <label for="fecha">Fecha límite</label>
+          <input id="fecha" type="text" placeholder="5 de octubre">
+          <p class="error" id="err-plan" hidden></p>
+          <button class="boton" id="btn-crear">Crear plan</button>
+        </form>
+      </div>
+      <div class="caja caja-ancha" style="margin-top:16px">
+        <h2>Tus planes</h2>
+        <p class="vacio" id="vacio">Todavía no hay ninguno.</p>
+        <div id="lista"></div>
+      </div>
+    </div>
+  </main>
+  <script src="/comun.js"></script>
+  <script>
+    pedir("/api/auth/me").then(function (res) {
+      if (!res.ok) {
+        location.replace("/login");
+        return;
+      }
+      document.getElementById("saludo").textContent = "Hola, " + res.json.user.nombre;
+      document.getElementById("cargando").hidden = true;
+      document.getElementById("contenido").hidden = false;
+      cargarPlanes();
+    });
+
+    async function cargarPlanes() {
+      var res = await pedir("/api/planes");
+      var lista = document.getElementById("lista");
+      var vacio = document.getElementById("vacio");
+      lista.innerHTML = "";
+      var planes = res.json.planes || [];
+      vacio.hidden = planes.length > 0;
+
+      for (var i = 0; i < planes.length; i++) {
+        var plan = planes[i];
+        var div = document.createElement("div");
+        div.className = "plan";
+
+        var texto = document.createElement("p");
+        texto.textContent = plan.nombre + " · " + plan.fecha_limite + " · " + plan.estado;
+        div.appendChild(texto);
+
+        if (plan.estado === "borrador") {
+          var boton = document.createElement("button");
+          boton.className = "boton-linea";
+          boton.type = "button";
+          boton.textContent = "Confirmar plan";
+          boton.onclick = function () {
+            confirmar(this.getAttribute("data-id"));
+          };
+          boton.setAttribute("data-id", plan.id);
+          div.appendChild(boton);
+        }
+
+        lista.appendChild(div);
+      }
+    }
+
+    document.getElementById("nuevo").onsubmit = async function (e) {
+      e.preventDefault();
+      var nombre = document.getElementById("nombre").value.trim();
+      var fecha = document.getElementById("fecha").value.trim();
+      mostrar("err-plan", "");
+      if (!nombre || !fecha) {
+        mostrar("err-plan", "Escribe el nombre y la fecha.");
+        return;
+      }
+      var boton = document.getElementById("btn-crear");
+      boton.disabled = true;
+      var res = await pedir("/api/planes", { nombre: nombre, fecha: fecha });
+      boton.disabled = false;
+      if (!res.ok) {
+        mostrar("err-plan", res.json.message || "No se pudo crear.");
+        return;
+      }
+      document.getElementById("nombre").value = "";
+      document.getElementById("fecha").value = "";
+      cargarPlanes();
+    };
+
+    async function confirmar(id) {
+      var res = await pedir("/api/planes/confirmar", { id: id });
+      if (!res.ok) {
+        mostrar("err-plan", res.json.message || "No se pudo confirmar.");
+        return;
+      }
+      cargarPlanes();
+    }
+
+    document.getElementById("salir").onclick = async function () {
+      this.disabled = true;
+      this.textContent = "Cerrando…";
+      await pedir("/api/auth/logout", {});
+      location.replace("/login");
+    };
+  </script>
+</body>
+</html>
