@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Mis planes · Planazo</title>
   <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/estilos.css">
+  <link rel="stylesheet" href="/css/estilos.css">
 </head>
 <body>
   <p class="centro" id="cargando">Cargando…</p>
@@ -33,7 +33,7 @@
       </div>
     </div>
   </main>
-  <script src="/comun.js"></script>
+  <script src="/js/comun.js"></script>
   <script>
     pedir("/api/auth/me").then(function (res) {
       if (!res.ok) {
@@ -58,9 +58,13 @@
         var plan = planes[i];
         var div = document.createElement("div");
         div.className = "plan";
+        var estado = plan.estado;
+        if (estado === "borrador") estado = "Borrador";
+        if (estado === "confirmado") estado = "Confirmado";
+        if (estado === "cancelado") estado = "Cancelado";
 
         var texto = document.createElement("p");
-        texto.textContent = plan.nombre + " · " + plan.fecha_limite + " · " + plan.estado;
+        texto.textContent = plan.nombre + " · " + plan.fecha_limite + " · " + estado;
         div.appendChild(texto);
 
         if (plan.estado === "borrador") {
@@ -68,11 +72,31 @@
           boton.className = "boton-linea";
           boton.type = "button";
           boton.textContent = "Confirmar plan";
+          boton.style.marginRight = "8px";
           boton.onclick = function () {
             confirmar(this.getAttribute("data-id"));
           };
           boton.setAttribute("data-id", plan.id);
           div.appendChild(boton);
+        }
+
+        if (plan.estado === "borrador" || plan.estado === "confirmado") {
+          var botonCancelar = document.createElement("button");
+          botonCancelar.className = "boton-linea";
+          botonCancelar.type = "button";
+          botonCancelar.textContent = "Cancelar plan";
+          botonCancelar.onclick = function () {
+            cancelar(this.getAttribute("data-id"));
+          };
+          botonCancelar.setAttribute("data-id", plan.id);
+          div.appendChild(botonCancelar);
+        }
+
+        if (plan.estado === "cancelado") {
+          var nota = document.createElement("p");
+          nota.className = "nota";
+          nota.textContent = "Ya está cancelado. No se puede confirmar ni cancelar otra vez.";
+          div.appendChild(nota);
         }
 
         lista.appendChild(div);
@@ -107,6 +131,19 @@
         mostrar("err-plan", res.json.message || "No se pudo confirmar.");
         return;
       }
+      cargarPlanes();
+    }
+
+    async function cancelar(id) {
+      if (!window.confirm("¿Cancelar este plan?")) {
+        return;
+      }
+      var res = await pedir("/api/planes/cancelar", { id: id });
+      if (!res.ok) {
+        mostrar("err-plan", res.json.message || "No se pudo cancelar.");
+        return;
+      }
+      mostrar("err-plan", "");
       cargarPlanes();
     }
 

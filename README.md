@@ -2,7 +2,7 @@
 
 Ayudar a un grupo a organizar un plan.
 
-El backend es un proyecto de Laravel en `apps/backend`. Las páginas siguen en `apps/web`. Laravel las abre y también atiende `/api`.
+El backend es un proyecto de Laravel en `apps/backend`. El frontend está en `apps/web`: las pantallas en `paginas`, el estilo en `css` y lo compartido en `js`. Laravel abre esas páginas y también atiende `/api`.
 
 ## Cómo levantarlo
 

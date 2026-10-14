@@ -4,10 +4,11 @@ use App\Http\Controllers\CuentaController;
 use App\Http\Controllers\PlanController;
 use Illuminate\Support\Facades\Route;
 
-// el html esta en apps/web, un nivel arriba de este proyecto
+// apps/web esta un nivel arriba: paginas, css y js
 function archivoWeb(string $nombre)
 {
-    $ruta = dirname(base_path()).DIRECTORY_SEPARATOR.'web'.DIRECTORY_SEPARATOR.$nombre;
+    $partes = str_replace('/', DIRECTORY_SEPARATOR, $nombre);
+    $ruta = dirname(base_path()).DIRECTORY_SEPARATOR.'web'.DIRECTORY_SEPARATOR.$partes;
     abort_unless(is_file($ruta), 404);
 
     $tipos = [
@@ -22,13 +23,13 @@ function archivoWeb(string $nombre)
     ]);
 }
 
-Route::get('/', fn () => archivoWeb('index.html'));
-Route::get('/login', fn () => archivoWeb('login.html'));
-Route::get('/register', fn () => archivoWeb('registro.html'));
-Route::get('/recover', fn () => archivoWeb('recuperar.html'));
-Route::get('/mis-planes', fn () => archivoWeb('planes.html'));
-Route::get('/estilos.css', fn () => archivoWeb('estilos.css'));
-Route::get('/comun.js', fn () => archivoWeb('comun.js'));
+Route::get('/', fn () => archivoWeb('paginas/index.html'));
+Route::get('/login', fn () => archivoWeb('paginas/login.html'));
+Route::get('/register', fn () => archivoWeb('paginas/registro.html'));
+Route::get('/recover', fn () => archivoWeb('paginas/recuperar.html'));
+Route::get('/mis-planes', fn () => archivoWeb('paginas/planes.html'));
+Route::get('/css/estilos.css', fn () => archivoWeb('css/estilos.css'));
+Route::get('/js/comun.js', fn () => archivoWeb('js/comun.js'));
 
 Route::post('/api/auth/register', [CuentaController::class, 'registrar']);
 Route::post('/api/auth/login', [CuentaController::class, 'entrar']);
@@ -40,3 +41,4 @@ Route::post('/api/auth/recover/confirm', [CuentaController::class, 'confirmar'])
 Route::get('/api/planes', [PlanController::class, 'lista']);
 Route::post('/api/planes', [PlanController::class, 'crear']);
 Route::post('/api/planes/confirmar', [PlanController::class, 'confirmar']);
+Route::post('/api/planes/cancelar', [PlanController::class, 'cancelar']);

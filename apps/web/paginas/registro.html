@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Crear cuenta · Planazo</title>
   <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/estilos.css">
+  <link rel="stylesheet" href="/css/estilos.css">
 </head>
 <body>
   <main class="form-pag">
@@ -27,7 +27,7 @@
       <p class="links"><a href="/login">¿Ya tienes cuenta? Inicia sesión</a></p>
     </div>
   </main>
-  <script src="/comun.js"></script>
+  <script src="/js/comun.js"></script>
   <script>
     pedir("/api/auth/me").then(function (res) {
       if (res.ok) location.replace("/mis-planes");

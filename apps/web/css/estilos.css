@@ -177,3 +177,9 @@ input:focus {
 }
 
 .plan p { margin: 0 0 8px; }
+
+.nota {
+  color: #5c5670;
+  font-size: 13px;
+  margin: 8px 0 0;
+}

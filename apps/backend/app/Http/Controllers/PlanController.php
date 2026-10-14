@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Plan;
+use App\ReglasPlan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -57,11 +58,44 @@ class PlanController extends Controller
         if (! $plan) {
             return response()->json(['message' => 'No encontré ese plan.'], 404);
         }
-        if ($plan->estado !== 'borrador') {
+        if (! ReglasPlan::puedeConfirmar($plan->user_id, $plan->estado, $user->id)) {
+            if ($plan->estado === 'cancelado') {
+                return response()->json(['message' => 'Un plan cancelado no se puede confirmar.'], 400);
+            }
+
             return response()->json(['message' => 'Ese plan ya no se puede confirmar.'], 400);
         }
 
         $plan->estado = 'confirmado';
+        $plan->save();
+
+        return response()->json(['ok' => true]);
+    }
+
+    public function cancelar(Request $request)
+    {
+        $user = Auth::user();
+        if (! $user) {
+            return response()->json(['message' => 'No has iniciado sesión'], 401);
+        }
+
+        $plan = Plan::where('id', $request->input('id'))
+            ->where('user_id', $user->id)
+            ->first();
+
+        if (! $plan) {
+            return response()->json(['message' => 'No encontré ese plan.'], 404);
+        }
+
+        if (! ReglasPlan::puedeCancelar($plan->user_id, $plan->estado, $user->id)) {
+            if ($plan->estado === 'cancelado') {
+                return response()->json(['message' => 'Ese plan ya está cancelado.'], 400);
+            }
+
+            return response()->json(['message' => 'No puedes cancelar ese plan.'], 400);
+        }
+
+        $plan->estado = 'cancelado';
         $plan->save();
 
         return response()->json(['ok' => true]);
