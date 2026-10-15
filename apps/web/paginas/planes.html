@@ -227,7 +227,18 @@
     }
 
     async function cancelar(id) {
-      if (!window.confirm("¿Cancelar este plan?")) {
+      var plan = null;
+      for (var i = 0; i < todos.length; i++) {
+        if (String(todos[i].id) === String(id)) plan = todos[i];
+      }
+      var pregunta = "¿Cancelar este plan?";
+      if (plan) {
+        var estado = plan.estado;
+        if (estado === "borrador") estado = "Borrador";
+        if (estado === "confirmado") estado = "Confirmado";
+        pregunta = "¿Cancelar " + plan.nombre + "? " + plan.fecha_limite + " · " + estado;
+      }
+      if (!window.confirm(pregunta)) {
         return;
       }
       var res = await pedir("/api/planes/cancelar", { id: id });
