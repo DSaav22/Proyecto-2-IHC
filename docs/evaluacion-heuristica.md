@@ -16,7 +16,7 @@ Las capturas van en `docs/evidencias/`. Ninguna falla está corregida.
 | ![[Pasted image 20261015151346.png]] | H6 · Reconocer antes que recordar       | Falla  | 2 · Menor | ![[Pasted image 20261015163859.png]] |
 | ![[Pasted image 20261015151526.png]] | H7 · Flexibilidad y eficiencia          | Cumple | —         |                                      |
 | ![[Pasted image 20261015151548.png]] | H8 · Diseño estético y minimalista      | Cumple | —         |                                      |
-| ![[Pasted image 20261015151736.png]] | H9 · Reconocer y recuperarse de errores | Falla  | 2 · Menor |                                      |
+| ![[Pasted image 20261015151736.png]] | H9 · Reconocer y recuperarse de errores | Falla  | 2 · Menor | ![[Pasted image 20261015170440.png]] |
 | ![[Pasted image 20261015151626.png]] | H10 · Ayuda y documentación             | Cumple | —         |                                      |
 
 ## H1 · Visibilidad del estado del sistema

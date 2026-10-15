@@ -49,6 +49,8 @@
     var todos = [];
     var editando = null;
     var ultimo = null;
+    var fallo = null;
+    var falloTexto = "";
     var miId = null;
 
     pedir("/api/auth/me").then(function (res) {
@@ -160,6 +162,13 @@
           div.appendChild(aviso);
         }
 
+        if (String(plan.id) === fallo) {
+          var mal = document.createElement("p");
+          mal.className = "error";
+          mal.textContent = falloTexto;
+          div.appendChild(mal);
+        }
+
         lista.appendChild(div);
       }
     }
@@ -221,7 +230,7 @@
       }
       boton.disabled = false;
       if (!res.ok) {
-        mostrar("err-plan", res.json.message || "No se pudo guardar.");
+        mostrar("err-plan", res.json.message || "No se pudo guardar. Revisa el nombre y la fecha.");
         return;
       }
       dejarEdicion();
@@ -231,9 +240,13 @@
     async function confirmar(id) {
       var res = await pedir("/api/planes/confirmar", { id: id });
       if (!res.ok) {
-        mostrar("err-plan", res.json.message || "No se pudo confirmar.");
+        fallo = String(id);
+        falloTexto = (res.json && res.json.message) || "No se pudo confirmar. Recarga la página.";
+        mostrar("err-plan", "");
+        mostrarLista();
         return;
       }
+      fallo = null;
       cargarPlanes();
     }
 
@@ -254,10 +267,14 @@
       }
       var res = await pedir("/api/planes/cancelar", { id: id });
       if (!res.ok) {
-        mostrar("err-plan", res.json.message || "No se pudo cancelar.");
+        fallo = String(id);
+        falloTexto = (res.json && res.json.message) || "No se pudo cancelar. Recarga la página.";
+        mostrar("err-plan", "");
+        mostrarLista();
         return;
       }
       mostrar("err-plan", "");
+      fallo = null;
       ultimo = String(id);
       cargarPlanes();
     }

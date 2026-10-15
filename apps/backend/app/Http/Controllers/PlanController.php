@@ -56,10 +56,10 @@ class PlanController extends Controller
             ->first();
 
         if (! $plan) {
-            return response()->json(['message' => 'No encontré ese plan.'], 404);
+            return response()->json(['message' => 'No encontré ese plan. Recarga la página.'], 404);
         }
         if (! ReglasPlan::puedeEditar($plan->user_id, $plan->estado, $user->id)) {
-            return response()->json(['message' => 'Ese plan ya no se puede editar.'], 400);
+            return response()->json(['message' => 'Ese plan ya no se puede editar. Deja de editar y mira la lista.'], 400);
         }
 
         $nombre = trim($request->input('nombre', ''));
@@ -87,14 +87,14 @@ class PlanController extends Controller
             ->first();
 
         if (! $plan) {
-            return response()->json(['message' => 'No encontré ese plan.'], 404);
+            return response()->json(['message' => 'No encontré ese plan. Recarga la página.'], 404);
         }
         if (! ReglasPlan::puedeConfirmar($plan->user_id, $plan->estado, $user->id)) {
             if ($plan->estado === 'cancelado') {
-                return response()->json(['message' => 'Un plan cancelado no se puede confirmar.'], 400);
+                return response()->json(['message' => 'Un plan cancelado no se puede confirmar. Recarga la página.'], 400);
             }
 
-            return response()->json(['message' => 'Ese plan ya no se puede confirmar.'], 400);
+            return response()->json(['message' => 'Ese plan ya no se puede confirmar. Recarga la página.'], 400);
         }
 
         $plan->estado = 'confirmado';
@@ -113,7 +113,7 @@ class PlanController extends Controller
         $plan = Plan::where('id', $request->input('id'))->first();
 
         if (! $plan) {
-            return response()->json(['message' => 'No encontré ese plan.'], 404);
+            return response()->json(['message' => 'No encontré ese plan. Recarga la página.'], 404);
         }
 
         if ((int) $plan->user_id !== (int) $user->id) {
@@ -122,10 +122,10 @@ class PlanController extends Controller
 
         if (! ReglasPlan::puedeCancelar($plan->user_id, $plan->estado, $user->id)) {
             if ($plan->estado === 'cancelado') {
-                return response()->json(['message' => 'Ese plan ya está cancelado.'], 400);
+                return response()->json(['message' => 'Ese plan ya está cancelado. Recarga la página para verlo.'], 400);
             }
 
-            return response()->json(['message' => 'No puedes cancelar ese plan.'], 400);
+            return response()->json(['message' => 'No puedes cancelar ese plan. Revisa el estado y vuelve a intentarlo.'], 400);
         }
 
         $plan->estado = 'cancelado';
