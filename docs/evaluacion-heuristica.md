@@ -6,18 +6,18 @@ Sesión: Usuario Uno (`usuario1@planazo.com`). En la lista están **Diego de Fie
 
 Las capturas van en `docs/evidencias/`. Ninguna falla está corregida.
 
-| Pantalla y evidencia                 | Heurística                              | Estado | Severidad |
-| ------------------------------------ | --------------------------------------- | ------ | --------- |
-| ![[Pasted image 20261015151038.png]] | H1 · Visibilidad del estado del sistema | Falla  | 3 · Mayor |
-| ![[Pasted image 20261015151125.png]] | H2 · Relación con el mundo real         | Cumple | —         |
-| ![[Pasted image 20261015151151.png]] | H3 · Control y libertad                 | Cumple | —         |
-| ![[Pasted image 20261015151228.png]] | H4 · Consistencia y estándares          | Cumple | —         |
-| ![[Pasted image 20261015151310.png]] | H5 · Prevención de errores              | Falla  | 2 · Menor |
-| ![[Pasted image 20261015151346.png]] | H6 · Reconocer antes que recordar       | Falla  | 2 · Menor |
-| ![[Pasted image 20261015151526.png]] | H7 · Flexibilidad y eficiencia          | Cumple | —         |
-| ![[Pasted image 20261015151548.png]] | H8 · Diseño estético y minimalista      | Cumple | —         |
-| ![[Pasted image 20261015151736.png]] | H9 · Reconocer y recuperarse de errores | Falla  | 2 · Menor |
-| ![[Pasted image 20261015151626.png]] | H10 · Ayuda y documentación             | Cumple | —         |
+| Pantalla y evidencia                 | Heurística                              | Estado | Severidad | Despues del arreglo                  |
+| ------------------------------------ | --------------------------------------- | ------ | --------- | ------------------------------------ |
+| ![[Pasted image 20261015151038.png]] | H1 · Visibilidad del estado del sistema | Falla  | 3 · Mayor | ![[Pasted image 20261015155529.png]] |
+| ![[Pasted image 20261015151125.png]] | H2 · Relación con el mundo real         | Cumple | —         |                                      |
+| ![[Pasted image 20261015151151.png]] | H3 · Control y libertad                 | Cumple | —         |                                      |
+| ![[Pasted image 20261015151228.png]] | H4 · Consistencia y estándares          | Cumple | —         |                                      |
+| ![[Pasted image 20261015151310.png]] | H5 · Prevención de errores              | Falla  | 2 · Menor |                                      |
+| ![[Pasted image 20261015151346.png]] | H6 · Reconocer antes que recordar       | Falla  | 2 · Menor |                                      |
+| ![[Pasted image 20261015151526.png]] | H7 · Flexibilidad y eficiencia          | Cumple | —         |                                      |
+| ![[Pasted image 20261015151548.png]] | H8 · Diseño estético y minimalista      | Cumple | —         |                                      |
+| ![[Pasted image 20261015151736.png]] | H9 · Reconocer y recuperarse de errores | Falla  | 2 · Menor |                                      |
+| ![[Pasted image 20261015151626.png]] | H10 · Ayuda y documentación             | Cumple | —         |                                      |
 
 ## H1 · Visibilidad del estado del sistema
 
