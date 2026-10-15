@@ -49,12 +49,14 @@
     var todos = [];
     var editando = null;
     var ultimo = null;
+    var miId = null;
 
     pedir("/api/auth/me").then(function (res) {
       if (!res.ok) {
         location.replace("/login");
         return;
       }
+      miId = res.json.user.id;
       document.getElementById("saludo").textContent = "Hola, " + res.json.user.nombre;
       document.getElementById("cargando").hidden = true;
       document.getElementById("contenido").hidden = false;
@@ -99,7 +101,16 @@
         texto.textContent = plan.nombre + " · " + plan.fecha_limite + " · " + estado;
         div.appendChild(texto);
 
-        if (plan.estado === "borrador") {
+        var mio = String(plan.user_id) === String(miId);
+
+        if (!mio) {
+          var ajeno = document.createElement("p");
+          ajeno.className = "nota";
+          ajeno.textContent = "Solo quien organiza puede cancelar este plan.";
+          div.appendChild(ajeno);
+        }
+
+        if (mio && plan.estado === "borrador") {
           var boton = document.createElement("button");
           boton.className = "boton-linea";
           boton.type = "button";
@@ -112,7 +123,7 @@
           div.appendChild(boton);
         }
 
-        if (plan.estado === "borrador" || plan.estado === "confirmado") {
+        if (mio && (plan.estado === "borrador" || plan.estado === "confirmado")) {
           var botonEditar = document.createElement("button");
           botonEditar.className = "boton-linea";
           botonEditar.type = "button";
@@ -135,7 +146,7 @@
           div.appendChild(botonCancelar);
         }
 
-        if (plan.estado === "cancelado") {
+        if (mio && plan.estado === "cancelado") {
           var nota = document.createElement("p");
           nota.className = "nota";
           nota.textContent = "Ya está cancelado. No se puede confirmar ni cancelar otra vez.";

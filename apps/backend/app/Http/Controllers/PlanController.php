@@ -16,7 +16,7 @@ class PlanController extends Controller
             return response()->json(['message' => 'No has iniciado sesión'], 401);
         }
 
-        $planes = Plan::where('user_id', $user->id)->get(['id', 'nombre', 'fecha_limite', 'estado']);
+        $planes = Plan::orderBy('id')->get(['id', 'user_id', 'nombre', 'fecha_limite', 'estado']);
 
         return response()->json(['planes' => $planes]);
     }
@@ -110,12 +110,14 @@ class PlanController extends Controller
             return response()->json(['message' => 'No has iniciado sesión'], 401);
         }
 
-        $plan = Plan::where('id', $request->input('id'))
-            ->where('user_id', $user->id)
-            ->first();
+        $plan = Plan::where('id', $request->input('id'))->first();
 
         if (! $plan) {
             return response()->json(['message' => 'No encontré ese plan.'], 404);
+        }
+
+        if ((int) $plan->user_id !== (int) $user->id) {
+            return response()->json(['message' => 'Solo quien organiza el plan puede cancelarlo.'], 400);
         }
 
         if (! ReglasPlan::puedeCancelar($plan->user_id, $plan->estado, $user->id)) {
