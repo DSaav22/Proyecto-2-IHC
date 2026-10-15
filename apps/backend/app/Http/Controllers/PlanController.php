@@ -44,6 +44,37 @@ class PlanController extends Controller
         return response()->json(['id' => $plan->id], 201);
     }
 
+    public function actualizar(Request $request)
+    {
+        $user = Auth::user();
+        if (! $user) {
+            return response()->json(['message' => 'No has iniciado sesión'], 401);
+        }
+
+        $plan = Plan::where('id', $request->input('id'))
+            ->where('user_id', $user->id)
+            ->first();
+
+        if (! $plan) {
+            return response()->json(['message' => 'No encontré ese plan.'], 404);
+        }
+        if (! ReglasPlan::puedeEditar($plan->user_id, $plan->estado, $user->id)) {
+            return response()->json(['message' => 'Ese plan ya no se puede editar.'], 400);
+        }
+
+        $nombre = trim($request->input('nombre', ''));
+        $fecha = trim($request->input('fecha', ''));
+        if ($nombre === '' || $fecha === '') {
+            return response()->json(['message' => 'Falta el nombre o la fecha.'], 400);
+        }
+
+        $plan->nombre = $nombre;
+        $plan->fecha_limite = $fecha;
+        $plan->save();
+
+        return response()->json(['ok' => true]);
+    }
+
     public function confirmar(Request $request)
     {
         $user = Auth::user();

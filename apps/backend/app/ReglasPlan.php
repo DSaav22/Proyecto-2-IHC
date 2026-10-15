@@ -25,4 +25,13 @@ class ReglasPlan
 
         return $estado === 'borrador';
     }
+
+    public static function puedeEditar($userId, $estado, $usuarioId)
+    {
+        if ((int) $userId !== (int) $usuarioId) {
+            return false;
+        }
+
+        return $estado === 'borrador' || $estado === 'confirmado';
+    }
 }

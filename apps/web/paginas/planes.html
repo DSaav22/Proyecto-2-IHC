@@ -16,7 +16,7 @@
         <button class="boton-linea" type="button" id="salir">Cerrar sesión</button>
       </div>
       <div class="caja caja-ancha">
-        <h2>Nuevo plan</h2>
+        <h2 id="titulo-form">Nuevo plan</h2>
         <form id="nuevo">
           <label for="nombre">Nombre</label>
           <input id="nombre" type="text" placeholder="Cena del viernes">
@@ -24,17 +24,31 @@
           <input id="fecha" type="text" placeholder="5 de octubre">
           <p class="error" id="err-plan" hidden></p>
           <button class="boton" id="btn-crear">Crear plan</button>
+          <button class="boton-linea" type="button" id="btn-dejar" hidden style="margin-top:10px">Dejar de editar</button>
         </form>
       </div>
       <div class="caja caja-ancha" style="margin-top:16px">
         <h2>Tus planes</h2>
+        <label for="busca">Buscar</label>
+        <input id="busca" type="text" placeholder="Nombre del plan">
+        <label for="filtro">Estado</label>
+        <select id="filtro">
+          <option value="">Todos</option>
+          <option value="borrador">Borrador</option>
+          <option value="confirmado">Confirmado</option>
+          <option value="cancelado">Cancelado</option>
+        </select>
         <p class="vacio" id="vacio">Todavía no hay ninguno.</p>
+        <p class="vacio" id="nada" hidden>Ninguno coincide.</p>
         <div id="lista"></div>
       </div>
     </div>
   </main>
   <script src="/js/comun.js"></script>
   <script>
+    var todos = [];
+    var editando = null;
+
     pedir("/api/auth/me").then(function (res) {
       if (!res.ok) {
         location.replace("/login");
@@ -48,14 +62,31 @@
 
     async function cargarPlanes() {
       var res = await pedir("/api/planes");
+      todos = res.json.planes || [];
+      mostrarLista();
+    }
+
+    function mostrarLista() {
       var lista = document.getElementById("lista");
       var vacio = document.getElementById("vacio");
+      var nada = document.getElementById("nada");
+      var q = document.getElementById("busca").value.trim().toLowerCase();
+      var filtro = document.getElementById("filtro").value;
       lista.innerHTML = "";
-      var planes = res.json.planes || [];
-      vacio.hidden = planes.length > 0;
 
-      for (var i = 0; i < planes.length; i++) {
-        var plan = planes[i];
+      var planes = [];
+      for (var i = 0; i < todos.length; i++) {
+        var item = todos[i];
+        if (filtro && item.estado !== filtro) continue;
+        if (q && item.nombre.toLowerCase().indexOf(q) === -1) continue;
+        planes.push(item);
+      }
+
+      vacio.hidden = todos.length > 0;
+      nada.hidden = todos.length === 0 || planes.length > 0;
+
+      for (var j = 0; j < planes.length; j++) {
+        var plan = planes[j];
         var div = document.createElement("div");
         div.className = "plan";
         var estado = plan.estado;
@@ -81,6 +112,17 @@
         }
 
         if (plan.estado === "borrador" || plan.estado === "confirmado") {
+          var botonEditar = document.createElement("button");
+          botonEditar.className = "boton-linea";
+          botonEditar.type = "button";
+          botonEditar.textContent = "Editar";
+          botonEditar.style.marginRight = "8px";
+          botonEditar.onclick = function () {
+            empezarEdicion(this.getAttribute("data-id"));
+          };
+          botonEditar.setAttribute("data-id", plan.id);
+          div.appendChild(botonEditar);
+
           var botonCancelar = document.createElement("button");
           botonCancelar.className = "boton-linea";
           botonCancelar.type = "button";
@@ -103,6 +145,44 @@
       }
     }
 
+    document.getElementById("busca").oninput = function () {
+      mostrarLista();
+    };
+
+    document.getElementById("filtro").onchange = function () {
+      mostrarLista();
+    };
+
+    function empezarEdicion(id) {
+      var plan = null;
+      for (var i = 0; i < todos.length; i++) {
+        if (String(todos[i].id) === String(id)) plan = todos[i];
+      }
+      if (!plan) return;
+      editando = plan.id;
+      document.getElementById("titulo-form").textContent = "Editar plan";
+      document.getElementById("nombre").value = plan.nombre;
+      document.getElementById("fecha").value = plan.fecha_limite;
+      document.getElementById("btn-crear").textContent = "Guardar cambios";
+      document.getElementById("btn-dejar").hidden = false;
+      mostrar("err-plan", "");
+      document.getElementById("nombre").focus();
+    }
+
+    function dejarEdicion() {
+      editando = null;
+      document.getElementById("titulo-form").textContent = "Nuevo plan";
+      document.getElementById("nombre").value = "";
+      document.getElementById("fecha").value = "";
+      document.getElementById("btn-crear").textContent = "Crear plan";
+      document.getElementById("btn-dejar").hidden = true;
+      mostrar("err-plan", "");
+    }
+
+    document.getElementById("btn-dejar").onclick = function () {
+      dejarEdicion();
+    };
+
     document.getElementById("nuevo").onsubmit = async function (e) {
       e.preventDefault();
       var nombre = document.getElementById("nombre").value.trim();
@@ -114,14 +194,18 @@
       }
       var boton = document.getElementById("btn-crear");
       boton.disabled = true;
-      var res = await pedir("/api/planes", { nombre: nombre, fecha: fecha });
+      var res;
+      if (editando) {
+        res = await pedir("/api/planes/actualizar", { id: editando, nombre: nombre, fecha: fecha });
+      } else {
+        res = await pedir("/api/planes", { nombre: nombre, fecha: fecha });
+      }
       boton.disabled = false;
       if (!res.ok) {
-        mostrar("err-plan", res.json.message || "No se pudo crear.");
+        mostrar("err-plan", res.json.message || "No se pudo guardar.");
         return;
       }
-      document.getElementById("nombre").value = "";
-      document.getElementById("fecha").value = "";
+      dejarEdicion();
       cargarPlanes();
     };
 

@@ -31,4 +31,24 @@ class ReglasPlanTest extends TestCase
     {
         $this->assertFalse(ReglasPlan::puedeConfirmar(1, 'cancelado', 1));
     }
+
+    public function test_el_organizador_puede_editar_un_borrador(): void
+    {
+        $this->assertTrue(ReglasPlan::puedeEditar(1, 'borrador', 1));
+    }
+
+    public function test_el_organizador_puede_editar_uno_confirmado(): void
+    {
+        $this->assertTrue(ReglasPlan::puedeEditar(1, 'confirmado', 1));
+    }
+
+    public function test_otra_persona_no_puede_editar(): void
+    {
+        $this->assertFalse(ReglasPlan::puedeEditar(1, 'confirmado', 2));
+    }
+
+    public function test_un_cancelado_no_se_edita(): void
+    {
+        $this->assertFalse(ReglasPlan::puedeEditar(1, 'cancelado', 1));
+    }
 }
