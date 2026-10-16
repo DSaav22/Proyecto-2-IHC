@@ -112,20 +112,37 @@
           div.appendChild(ajeno);
         }
 
-        if (mio && plan.estado === "borrador") {
-          var boton = document.createElement("button");
-          boton.className = "boton-linea";
-          boton.type = "button";
-          boton.textContent = "Confirmar plan";
-          boton.style.marginRight = "8px";
-          boton.onclick = function () {
-            confirmar(this.getAttribute("data-id"));
-          };
-          boton.setAttribute("data-id", plan.id);
-          div.appendChild(boton);
-        }
-
         if (mio && (plan.estado === "borrador" || plan.estado === "confirmado")) {
+          var botonCancelar = document.createElement("button");
+          botonCancelar.className = "boton";
+          botonCancelar.type = "button";
+          botonCancelar.textContent = "Cancelar plan";
+          botonCancelar.style.width = "auto";
+          botonCancelar.style.display = "inline-block";
+          botonCancelar.style.marginTop = "0";
+          botonCancelar.style.marginRight = "8px";
+          botonCancelar.onclick = function () {
+            cancelar(this.getAttribute("data-id"));
+          };
+          botonCancelar.setAttribute("data-id", plan.id);
+          div.appendChild(botonCancelar);
+
+          var otros = document.createElement("span");
+          otros.hidden = true;
+
+          if (plan.estado === "borrador") {
+            var boton = document.createElement("button");
+            boton.className = "boton-linea";
+            boton.type = "button";
+            boton.textContent = "Confirmar plan";
+            boton.style.marginRight = "8px";
+            boton.onclick = function () {
+              confirmar(this.getAttribute("data-id"));
+            };
+            boton.setAttribute("data-id", plan.id);
+            otros.appendChild(boton);
+          }
+
           var botonEditar = document.createElement("button");
           botonEditar.className = "boton-linea";
           botonEditar.type = "button";
@@ -135,17 +152,18 @@
             empezarEdicion(this.getAttribute("data-id"));
           };
           botonEditar.setAttribute("data-id", plan.id);
-          div.appendChild(botonEditar);
+          otros.appendChild(botonEditar);
 
-          var botonCancelar = document.createElement("button");
-          botonCancelar.className = "boton-linea";
-          botonCancelar.type = "button";
-          botonCancelar.textContent = "Cancelar plan";
-          botonCancelar.onclick = function () {
-            cancelar(this.getAttribute("data-id"));
+          var mas = document.createElement("button");
+          mas.className = "boton-linea";
+          mas.type = "button";
+          mas.textContent = "Más";
+          mas.onclick = function () {
+            otros.hidden = !otros.hidden;
+            this.textContent = otros.hidden ? "Más" : "Ocultar";
           };
-          botonCancelar.setAttribute("data-id", plan.id);
-          div.appendChild(botonCancelar);
+          div.appendChild(mas);
+          div.appendChild(otros);
         }
 
         if (mio && plan.estado === "cancelado") {

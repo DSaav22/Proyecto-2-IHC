@@ -33,3 +33,9 @@ El cuadro pregunta con otra frase: "¿Cancelar nombre? fecha · Estado". Hay que
 ## Cuál se prioriza
 
 **Hick.** En el momento de cancelar, las tres acciones piden la misma atención. Fitts y la carga también están, y aun así se puede seguir.
+
+## Después
+
+![[clase-16-hick-despues.png]]
+
+**Cancelar plan** queda primero y en violeta. **Confirmar plan** y **Editar** salen con **Más**.
