@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "clase-16-decisiones.md",
+                "file": "decisiones-interaccion.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "clase-16-decisiones"
+              "title": "decisiones-interaccion"
             }
           },
           {
@@ -204,6 +204,7 @@
   },
   "active": "f05b7475add2c507",
   "lastOpenFiles": [
+    "clase-16-decisiones.md",
     "evidencias/clase-16/clase-16-hick-despues.png",
     "evidencias/clase-16/clase-16-carga.png",
     "evidencias/clase-16/clase-16-hick.png",
@@ -212,14 +213,12 @@
     "Pasted image 20261015212933.png",
     "Pasted image 20261015212909.png",
     "evaluacion-heuristica.md",
-    "clase-16-decisiones.md",
     "clase-15-cancelar-plan.md",
     "Pasted image 20261015170440.png",
     "Pasted image 20261015165036.png",
     "Pasted image 20261015163859.png",
     "Pasted image 20261015155529.png",
     "project-card.md",
-    "evidencias/Pasted image 20261015151038.png",
     "evidencias"
   ]
 }
