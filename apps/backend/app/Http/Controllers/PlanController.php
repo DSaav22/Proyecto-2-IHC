@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cambio;
 use App\Models\Plan;
 use App\ReglasPlan;
 use Illuminate\Http\Request;
@@ -41,6 +42,14 @@ class PlanController extends Controller
             'estado' => 'borrador',
         ]);
 
+        Cambio::create([
+            'user_id' => $user->id,
+            'plan_id' => $plan->id,
+            'nombre' => $plan->nombre,
+            'accion' => 'creado',
+            'resultado' => 'borrador',
+        ]);
+
         return response()->json(['id' => $plan->id], 201);
     }
 
@@ -72,6 +81,14 @@ class PlanController extends Controller
         $plan->fecha_limite = $fecha;
         $plan->save();
 
+        Cambio::create([
+            'user_id' => $user->id,
+            'plan_id' => $plan->id,
+            'nombre' => $plan->nombre,
+            'accion' => 'editado',
+            'resultado' => $nombre.' · '.$fecha,
+        ]);
+
         return response()->json(['ok' => true]);
     }
 
@@ -99,6 +116,14 @@ class PlanController extends Controller
 
         $plan->estado = 'confirmado';
         $plan->save();
+
+        Cambio::create([
+            'user_id' => $user->id,
+            'plan_id' => $plan->id,
+            'nombre' => $plan->nombre,
+            'accion' => 'confirmado',
+            'resultado' => 'confirmado',
+        ]);
 
         return response()->json(['ok' => true]);
     }
@@ -130,6 +155,14 @@ class PlanController extends Controller
 
         $plan->estado = 'cancelado';
         $plan->save();
+
+        Cambio::create([
+            'user_id' => $user->id,
+            'plan_id' => $plan->id,
+            'nombre' => $plan->nombre,
+            'accion' => 'cancelado',
+            'resultado' => 'cancelado',
+        ]);
 
         return response()->json(['ok' => true]);
     }
