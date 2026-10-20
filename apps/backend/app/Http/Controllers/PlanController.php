@@ -22,6 +22,20 @@ class PlanController extends Controller
         return response()->json(['planes' => $planes]);
     }
 
+    public function cambios()
+    {
+        $user = Auth::user();
+        if (! $user) {
+            return response()->json(['message' => 'No has iniciado sesión'], 401);
+        }
+
+        $cambios = Cambio::where('user_id', $user->id)
+            ->orderBy('id', 'desc')
+            ->get(['id', 'plan_id', 'nombre', 'accion', 'resultado', 'created_at']);
+
+        return response()->json(['cambios' => $cambios]);
+    }
+
     public function crear(Request $request)
     {
         $user = Auth::user();

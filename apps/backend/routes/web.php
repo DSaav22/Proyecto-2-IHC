@@ -43,3 +43,4 @@ Route::post('/api/planes', [PlanController::class, 'crear']);
 Route::post('/api/planes/actualizar', [PlanController::class, 'actualizar']);
 Route::post('/api/planes/confirmar', [PlanController::class, 'confirmar']);
 Route::post('/api/planes/cancelar', [PlanController::class, 'cancelar']);
+Route::get('/api/cambios', [PlanController::class, 'cambios']);
