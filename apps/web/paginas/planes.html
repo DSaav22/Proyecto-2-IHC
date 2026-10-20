@@ -13,7 +13,15 @@
     <div>
       <div class="barra">
         <h1 id="saludo">Hola</h1>
-        <button class="boton-linea" type="button" id="salir">Cerrar sesión</button>
+        <div>
+          <button class="boton-linea" type="button" id="ver-historial" style="margin-right:8px">Historial</button>
+          <button class="boton-linea" type="button" id="salir">Cerrar sesión</button>
+        </div>
+      </div>
+      <div class="caja caja-ancha" id="caja-historial" hidden style="margin-top:16px">
+        <h2>Historial</h2>
+        <p class="vacio" id="vacio-cambios" hidden>Todavía no hay cambios.</p>
+        <div id="cambios"></div>
       </div>
       <div class="caja caja-ancha">
         <h2 id="titulo-form">Nuevo plan</h2>
@@ -70,6 +78,53 @@
       todos = res.json.planes || [];
       mostrarLista();
     }
+
+    async function cargarCambios() {
+      var res = await pedir("/api/cambios");
+      var cambios = res.json.cambios || [];
+      var lista = document.getElementById("cambios");
+      var vacio = document.getElementById("vacio-cambios");
+      lista.innerHTML = "";
+      vacio.hidden = cambios.length > 0;
+
+      for (var i = 0; i < cambios.length; i++) {
+        var cambio = cambios[i];
+        var div = document.createElement("div");
+        div.className = "plan";
+        var accion = cambio.accion;
+        if (accion === "creado") accion = "Creado";
+        if (accion === "editado") accion = "Editado";
+        if (accion === "confirmado") accion = "Confirmado";
+        if (accion === "cancelado") accion = "Cancelado";
+        var resultado = cambio.resultado;
+        if (resultado === "borrador") resultado = "Borrador";
+        if (resultado === "confirmado") resultado = "Confirmado";
+        if (resultado === "cancelado") resultado = "Cancelado";
+        var cuando = cambio.created_at || "";
+        cuando = cuando.replace("T", " ").slice(0, 16);
+
+        var texto = document.createElement("p");
+        texto.textContent = cambio.nombre + " · " + accion;
+        div.appendChild(texto);
+        var nota = document.createElement("p");
+        nota.className = "nota";
+        nota.textContent = resultado + " · " + cuando;
+        div.appendChild(nota);
+        lista.appendChild(div);
+      }
+    }
+
+    document.getElementById("ver-historial").onclick = function () {
+      var caja = document.getElementById("caja-historial");
+      if (!caja.hidden) {
+        caja.hidden = true;
+        this.textContent = "Historial";
+        return;
+      }
+      caja.hidden = false;
+      this.textContent = "Ocultar";
+      cargarCambios();
+    };
 
     function mostrarLista() {
       var lista = document.getElementById("lista");
